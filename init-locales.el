@@ -283,7 +283,18 @@
   (insert "「")
   (save-excursion  (insert "」"))
   )
+(defun lc/open-buffer-path ()
+  "Open buffer path in explorer.exe."
+  (interactive)
+  (call-process-shell-command (concat  "start " default-directory)  nil nil t) ;; explorer.exe not work.
+  )
 
+;; https://stackoverflow.com/questions/13505113/how-to-open-the-native-cmd-exe-window-in-emacs
+(defun lc/open-buffer-cmd ()
+  "Open cmd.exe in buffer path."
+  (interactive)
+  (call-process-shell-command (concat  " start cmd.exe /K cd " default-directory)  nil nil t)
+  )
 ;; https://sachachua.com/blog/2014/04/org-mode-helps-deal-ever-growing-backlog/
 (setq org-deadline-warning-days 60)
 
