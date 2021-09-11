@@ -70,7 +70,7 @@ local lspfuzzy = require 'lspfuzzy'
 lsp.ccls.setup {}
 lsp.pylsp.setup {}
 lsp.rust_analyzer.setup {}
-lspfuzzy.setup {}  -- Make the LSP client use FZF instead of the quickfix list
+-- lspfuzzy.setup {}  -- Make the LSP client use FZF instead of the quickfix list
 
 local on_attach = function(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end

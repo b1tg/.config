@@ -11,3 +11,8 @@ rebuild with flakes
 format
 
      nixpkgs-fmt configuration.nix
+
+
+## nvim
+
+- https://oroques.dev/notes/neovim-init/
