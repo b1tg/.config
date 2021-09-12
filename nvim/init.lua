@@ -21,10 +21,17 @@ paq {'neovim/nvim-lspconfig'}
 paq {'junegunn/fzf', run = fn['fzf#install']}
 paq {'junegunn/fzf.vim'}
 paq {'ojroques/nvim-lspfuzzy'}
+-- custom
+paq {'nvim-lua/plenary.nvim'}
+paq {'lewis6991/gitsigns.nvim'}
+paq {'tpope/vim-commentary'}
 g['deoplete#enable_at_startup'] = 1  -- enable deoplete at startup
 
 -------------------- OPTIONS -------------------------------
 cmd 'colorscheme desert'            -- Put your favorite colorscheme here
+cmd 'set mouse=a'
+cmd 'set colorcolumn=80'
+
 opt.completeopt = {'menuone', 'noinsert', 'noselect'}  -- Completion options (for deoplete)
 opt.expandtab = true                -- Use spaces instead of tabs
 opt.hidden = true                   -- Enable background buffers
