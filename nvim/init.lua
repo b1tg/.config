@@ -10,22 +10,52 @@ local function map(mode, lhs, rhs, opts)
   vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
 
+-- use vim plug to fix proxy issue
+-- https://github.com/junegunn/vim-plug/issues/912
+local vim = vim
+local function plug(path, config)
+  vim.validate {
+    path = {path, 's'};
+    config = {config, vim.tbl_islist, 'an array of packages'};
+  }
+  vim.fn["plug#begin"](path)
+  for _, v in ipairs(config) do
+    if type(v) == 'string' then
+      vim.fn["plug#"](v)
+    elseif type(v) == 'table' then
+      local p = v[1]
+      assert(p, 'Must specify package as first index.')
+      v[1] = nil
+      vim.fn["plug#"](p, v)
+      v[1] = p
+    end
+  end
+  vim.fn["plug#end"]()
+end
+plug('~/.config/nvim/plugged', {
+  'neovim/nvim-lspconfig';
+  'nvim-treesitter/nvim-treesitter';
+  'ojroques/nvim-lspfuzzy';
+  'tpope/vim-commentary';
+  'nvim-lua/plenary.nvim'; -- dep of gitsigns.nvim
+  'lewis6991/gitsigns.nvim';
+})
 -------------------- PLUGINS -------------------------------
 cmd 'packadd paq-nvim'               -- load the package manager
 local paq = require('paq-nvim').paq  -- a convenient alias
 paq {'savq/paq-nvim', opt = true}    -- paq-nvim manages itself
-paq {'shougo/deoplete-lsp'}
-paq {'shougo/deoplete.nvim', run = fn['remote#host#UpdateRemotePlugins']}
-paq {'nvim-treesitter/nvim-treesitter'}
-paq {'neovim/nvim-lspconfig'}
-paq {'junegunn/fzf', run = fn['fzf#install']}
-paq {'junegunn/fzf.vim'}
-paq {'ojroques/nvim-lspfuzzy'}
--- custom
-paq {'nvim-lua/plenary.nvim'}
-paq {'lewis6991/gitsigns.nvim'}
-paq {'tpope/vim-commentary'}
-g['deoplete#enable_at_startup'] = 1  -- enable deoplete at startup
+-- paq {'shougo/deoplete-lsp'}
+-- paq {'shougo/deoplete.nvim', run = fn['remote#host#UpdateRemotePlugins']}
+-- paq {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
+-- paq {'neovim/nvim-lspconfig'}
+-- paq {'junegunn/fzf', run = fn['fzf#install']}
+-- paq {'junegunn/fzf.vim'}
+-- paq {'ojroques/nvim-lspfuzzy'}
+-- -- custom
+-- paq {'nvim-lua/plenary.nvim'}
+-- paq {'lewis6991/gitsigns.nvim'}
+-- paq {'tpope/vim-commentary'}
+-- g['deoplete#enable_at_startup'] = 1  -- enable deoplete at startup
 
 -------------------- OPTIONS -------------------------------
 cmd 'colorscheme desert'            -- Put your favorite colorscheme here
@@ -64,6 +94,9 @@ map('i', '<Tab>', 'pumvisible() ? "\\<C-n>" : "\\<Tab>"', {expr = true})
 
 map('n', '<C-l>', '<cmd>noh<CR>')    -- Clear highlights
 map('n', '<leader>o', 'm`o<Esc>``')  -- Insert a newline in normal mode
+
+-------------------- git-sign ------------------------------
+require('gitsigns').setup()
 
 -------------------- TREE-SITTER ---------------------------
 local ts = require 'nvim-treesitter.configs'
